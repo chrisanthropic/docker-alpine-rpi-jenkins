@@ -16,6 +16,7 @@ RUN echo "http://dl-6.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     zip \
     curl \
     wget \
+    sudo \
     docker \
     && rm -rf /var/cache/apk/*
 
@@ -27,6 +28,12 @@ RUN addgroup jenkins && \
 RUN mkdir -p /usr/share/jenkins && \
     chown -R jenkins:jenkins /usr/share/jenkins && \
     chmod -R 775 /usr/share/jenkins
+
+# Let the jenkins user run with passwordless sudo
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+    
+# Start docker at boot
+RUN rc-update add docker boot
     
 USER jenkins
 
